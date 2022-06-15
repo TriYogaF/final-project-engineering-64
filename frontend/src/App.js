@@ -1,14 +1,21 @@
-import "./App.css";
+import Navbar from './component/NaviBar';
+import Content from './component/Content';
 import UploadBook from "./pages/UploadBook";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <h1>Hello World</h1>
-      <Routes>
-        <Route path="/uploadbook" element={<UploadBook />} />
-      </Routes>
+    <div aria-label="App" className="App">
+      <div className="routes" aria-label="routes">
+          <Routes>
+            <Route path="/uploadbook" element={<UploadBook />} />
+          </Routes>
+      </div>
+
+      <div aria-label="routes">
+        <Navbar />
+        <Content />
+      </div>
     </div>
   );
 }
