@@ -1,6 +1,7 @@
 package main
 
 import (
+	"diary/auth"
 	"diary/handler"
 	"diary/user"
 	"log"
@@ -19,9 +20,9 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
+	authService := auth.NewService()
 
-
-	userHandler := handler.NewUserHandler(userService)
+	userHandler := handler.NewUserHandler(userService, authService)
 
 	router := gin.Default()
 	api := router.Group("api/v1")
@@ -29,6 +30,7 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
+	api.POST("/upload-avatar", userHandler.UploadAvatar)
 	router.Run()
 
 

@@ -1,27 +1,24 @@
 import Navbar from './component/NavBar';
 import Header from './pages/Header';
 import Content from './pages/Content';
-import Footer from './component/Footer';
+
 import UploadBook from "./pages/UploadBook";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div aria-label="App" className="App">
+    <main aria-label="App" className="App">
       <div className="routes" aria-label="routes">
-          <Routes>
-            <Route path="/uploadbook" element={<UploadBook />} />
-          </Routes>
-      </div>
-
-      <div aria-label="routes">
         <Navbar />
         <Header />
-        <Content />
-        <Footer />
+          <Route path="/" element={<Content />} />
+          <Route path="/uploadbook" element={<UploadBook />} />
+          <Route path="/register" element={<Register />} />
       </div>
-    </div>
-  );
+    </main>
+  )
 }
-
+      
 export default App;
