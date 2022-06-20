@@ -6,7 +6,7 @@ export default function NavBar(){
    return (
       <>
          <Navbar style={{ backgroundColor: "#8FB9AA" }} >
-               <Navbar.Brand href="App.js">
+               <Navbar.Brand href="../App.js">
                   <img src={Diary} alt="logo" width="80px" className="img-fluid sm-3" />
                </Navbar.Brand>
                <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -1,6 +1,4 @@
 import Book from '../assets/book.png'
-// import Image from '../assets/image.png'
-// import Image2 from '../assets/image2.png'
 
 const size = {
    sm: {
