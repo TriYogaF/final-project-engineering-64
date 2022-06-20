@@ -3,9 +3,11 @@ package main
 import (
 	"database/sql"
 	"diary/auth"
+	"diary/book"
 	"diary/handler"
 	"diary/helper"
 	"diary/user"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -25,6 +27,19 @@ func main() {
 	}
 
 	userRepository := user.NewRepository(db)
+	bookRepository := book.NewRepository(db)
+
+	// tes repo
+	books, err := bookRepository.FindByUserID(1)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("==========")
+	fmt.Println("==========")
+	fmt.Println("==========")
+	fmt.Println(len(books))
+
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
@@ -37,63 +52,59 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
-	api.POST("/upload-avatar", authMiddleware(authService, userService) ,userHandler.UploadAvatar)
+	api.POST("/upload-avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
 	router.Run()
-
 
 }
 
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
-	return func(c *gin.Context){
-			tokenHeader := c.GetHeader("Authorization")
-			
-			if !strings.Contains(tokenHeader, "Bearer") {
-				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
-				return
-			}
+	return func(c *gin.Context) {
+		tokenHeader := c.GetHeader("Authorization")
 
-			tokenJWT := ""
-			tokenArray := strings.Split(tokenHeader, " ")
-			if len(tokenArray) == 2 {
-				tokenJWT = tokenArray[1]
-			}
+		if !strings.Contains(tokenHeader, "Bearer") {
+			response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
 
-			token, err := authService.ValidateToken(tokenJWT)
-			if err != nil {
-				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
-				return
-			}
+		tokenJWT := ""
+		tokenArray := strings.Split(tokenHeader, " ")
+		if len(tokenArray) == 2 {
+			tokenJWT = tokenArray[1]
+		}
 
-			claim, ok := token.Claims.(jwt.MapClaims)
-			if !ok || !token.Valid {
-				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
-				return
-			}
+		token, err := authService.ValidateToken(tokenJWT)
+		if err != nil {
+			response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
 
-			userID := int(claim["user_id"].(float64))
+		claim, ok := token.Claims.(jwt.MapClaims)
+		if !ok || !token.Valid {
+			response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
 
-			user, err := userService.GetUserByID(userID)
-			if err != nil {
-				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
-				return
-			}
+		userID := int(claim["user_id"].(float64))
 
-			c.Set("CurrentUser", user)
+		user, err := userService.GetUserByID(userID)
+		if err != nil {
+			response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+
+		c.Set("CurrentUser", user)
 	}
 }
-
-
 
 // Layering :
 // handler
 // service
 // repository
 // db
-
 
 // input dari user
 // handler -> mapping inputan dari user menjadi struct input
