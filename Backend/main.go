@@ -4,9 +4,13 @@ import (
 	"database/sql"
 	"diary/auth"
 	"diary/handler"
+	"diary/helper"
 	"diary/user"
 	"log"
+	"net/http"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 	cors "github.com/rs/cors/wrapper/gin"
@@ -33,11 +37,55 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
-	api.POST("/upload-avatar", userHandler.UploadAvatar)
+	api.POST("/upload-avatar", authMiddleware(authService, userService) ,userHandler.UploadAvatar)
 	router.Run()
 
 
 }
+
+func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
+	return func(c *gin.Context){
+			tokenHeader := c.GetHeader("Authorization")
+			
+			if !strings.Contains(tokenHeader, "Bearer") {
+				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+				return
+			}
+
+			tokenJWT := ""
+			tokenArray := strings.Split(tokenHeader, " ")
+			if len(tokenArray) == 2 {
+				tokenJWT = tokenArray[1]
+			}
+
+			token, err := authService.ValidateToken(tokenJWT)
+			if err != nil {
+				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+				return
+			}
+
+			claim, ok := token.Claims.(jwt.MapClaims)
+			if !ok || !token.Valid {
+				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+				return
+			}
+
+			userID := int(claim["user_id"].(float64))
+
+			user, err := userService.GetUserByID(userID)
+			if err != nil {
+				response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
+				c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+				return
+			}
+
+			c.Set("CurrentUser", user)
+	}
+}
+
 
 
 // Layering :
