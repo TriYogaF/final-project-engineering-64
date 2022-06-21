@@ -29,19 +29,13 @@ func main() {
 	userRepository := user.NewRepository(db)
 	bookRepository := book.NewRepository(db)
 
-	// tes repo
-	books, err := bookRepository.FindByUserID(1)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("==========")
-	fmt.Println("==========")
-	fmt.Println("==========")
-	fmt.Println(len(books))
-
 	userService := user.NewService(userRepository)
+	bookService := book.NewService(bookRepository)
 	authService := auth.NewService()
+
+	// tes service
+	books, _ := bookService.GetBooks(10)
+	fmt.Println(len(books))
 
 	userHandler := handler.NewUserHandler(userService, authService)
 

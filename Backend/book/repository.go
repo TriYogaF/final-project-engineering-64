@@ -30,13 +30,18 @@ func (r *repository) FindAll() ([]Book, error) {
 		if err != nil {
 			return nil, err
 		}
+		listCategory, err := r.FindCategories(book.ID)
+		if err != nil {
+			return nil, err
+		}
+		book.Category = listCategory
 		books = append(books, book)
 	}
 	return books, nil
 }
 
 func (r *repository) FindByUserID(userID int) ([]Book, error) {
-	rows, err := r.db.Query("SELECT * FROM books WHERE id = ?", userID)
+	rows, err := r.db.Query("SELECT * FROM books WHERE user_id = ?", userID)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +54,32 @@ func (r *repository) FindByUserID(userID int) ([]Book, error) {
 		if err != nil {
 			return nil, err
 		}
+		listCategory, err := r.FindCategories(book.ID)
+		if err != nil {
+			return nil, err
+		}
+		book.Category = listCategory
 		books = append(books, book)
 	}
 	return books, nil
+}
+
+func (r *repository) FindCategories(bookID int) ([]string, error) {
+	rows, err := r.db.Query("SELECT c.name as category FROM book_categories as a LEFT JOIN categories as c ON a.category_id = c.id WHERE a.book_id = ?", bookID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var categories []string
+	for rows.Next() {
+		var category string
+		err := rows.Scan(&category)
+		if err != nil {
+			return nil, err
+		}
+		categories = append(categories, category)
+	}
+	return categories, nil
+
 }
