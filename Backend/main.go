@@ -7,7 +7,6 @@ import (
 	"diary/handler"
 	"diary/helper"
 	"diary/user"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -33,11 +32,8 @@ func main() {
 	bookService := book.NewService(bookRepository)
 	authService := auth.NewService()
 
-	// tes service
-	books, _ := bookService.GetBooks(10)
-	fmt.Println(len(books))
-
 	userHandler := handler.NewUserHandler(userService, authService)
+	bookHandler := handler.NewBookHandler(bookService)
 
 	router := gin.Default()
 
@@ -47,6 +43,9 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
 	api.POST("/upload-avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
+
+	api.GET("/books", bookHandler.GetBooks)
+
 	router.Run()
 
 }
