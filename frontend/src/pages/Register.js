@@ -19,7 +19,7 @@ const secondaryColor = {
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
-const BASE_URL = "http://quiet-woodland-87309.herokuapp.com/api/v1";
+// const BASE_URL = "http://quiet-woodland-87309.herokuapp.com/api/v1";
 const REGISTER_URL = "/users";
 
 export default function Register() {
@@ -86,51 +86,23 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(name, gender, email, password);
-    // setSuccess(true);
 
     try {
       const response = await axios.post(REGISTER_URL, JSON.stringify({ name, gender, email, password }), {
         headers: { "Content-Type": "application/json" },
-        withCredentials: true,
       });
-      // fetch(BASE_URL + "/users", {
-      //   method: "POST",
-      //   mode: "no-cors",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     name,
-      //     gender,
-      //     email,
-      //     password,
-      //   }),
-      // }).then((response) => console.log(response));
-      // .then((json) => console.log(json));
-      console.log(response?.data);
-      console.log(JSON.stringify(response));
+      console.log(JSON.stringify(response.data));
       setSuccess(true);
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg("Username Taken");
+      } else if (err.response?.status === 400) {
+        setErrMsg("The email you are using is already registered");
       } else {
         setErrMsg("Registration Failed");
       }
       errRef.current.focus();
     }
-    // fetch(BASE_URL + "/users", {
-    //   method: "POST",
-    //   mode: "no-cors",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     name,
-    //     gender,
-    //     email,
-    //     password,
-    //   }),
-    // }).then((response) => console.log(response));
-    // .then((json) => console.log(json));
   };
 
   return (
