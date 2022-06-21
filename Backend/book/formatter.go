@@ -7,6 +7,7 @@ type BookFormatter struct {
 	Title      string    `json:"title"`
 	Writer     string    `json:"writer"`
 	CoverImage *string   `json:"cover_image"`
+	Slug       string    `json:"slug"`
 	CreatedAt  time.Time `json:"created_at"`
 }
 
@@ -16,6 +17,7 @@ func FormatBook(book Book) BookFormatter {
 	BookFormatter.Title = book.Title
 	BookFormatter.Writer = book.Writer
 	BookFormatter.CoverImage = book.CoverImage
+	BookFormatter.Slug = book.Slug
 	BookFormatter.CreatedAt = book.CreatedAt
 
 	return BookFormatter
