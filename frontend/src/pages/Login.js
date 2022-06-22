@@ -41,7 +41,7 @@ export default function Register() {
                   If you don't have an account
                   <br />
                   You can{" "}
-                  <a href="../pages/Register" className="link-dark gh-regist">
+                  <a href="/register" className="link-dark gh-regist">
                     Register here !
                   </a>
                 </p>

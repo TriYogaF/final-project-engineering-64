@@ -1,14 +1,14 @@
 import React from "react";
 import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
-import Diary from "../assets/Diary.png";
+import Diary from "../assets/diary-admin.png";
 import About from '../pages/About';
 import Content from '../pages/Content';
 import UploadBook from "../pages/UploadBook";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
-import React from "react";
-import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
-import Diary from "../assets/Diary.png";
+
+
+
 
 export const NavItem = () => {
    let itemNav=[
