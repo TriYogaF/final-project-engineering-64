@@ -1,17 +1,14 @@
-<<<<<<< HEAD
-import React from 'react'
-import { Navbar, Form, FormControl,  Nav } from 'react-bootstrap'
+import React from "react";
+import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
+import Diary from "../assets/Diary.png";
 import About from '../pages/About';
 import Content from '../pages/Content';
 import UploadBook from "../pages/UploadBook";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
-=======
 import React from "react";
 import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
 import Diary from "../assets/Diary.png";
-
->>>>>>> main
 
 export const NavItem = () => {
    let itemNav=[
@@ -49,7 +46,7 @@ export default function NavBar(data){
          <Navbar style={{ backgroundColor: "#FFFFFF"}}>
                <Navbar.Brand href="App.js">
                   <img src="../assets/img/diary.png" alt="logo" width="150px" className="img-fluid m-3" />
-               </Navbar.Brand>  
+               </Navbar.Brand> 
                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                <Navbar.Collapse id="basic-navbar-nav">
                   <Form>

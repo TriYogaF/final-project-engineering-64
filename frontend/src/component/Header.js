@@ -1,3 +1,4 @@
+
 const size = {
    sm: {
       width: '5em',
@@ -10,7 +11,7 @@ const size = {
 }
 
 export default function Content() {
-   return ( 
+   return (
       <div className="container-fluid px-100 px-lg-5 mb-3" aria-label="content" style={{ backgroundColor: "#304D63" }} >
          <div className="row align-items-center col-lg-12 mb-4 pb-4 px-5">
             <div className="col-sm-8 text-center text-lg-left">
