@@ -46,6 +46,7 @@ func main() {
 	api.POST("/upload-avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
 
 	api.GET("/books", bookHandler.GetBooks)
+	api.GET("/books/:id", bookHandler.GetBook)
 
 	router.Run()
 

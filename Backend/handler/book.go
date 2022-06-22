@@ -30,3 +30,24 @@ func (h *bookHandler) GetBooks(c *gin.Context) {
 	response := helper.APIResponse("List of Books", http.StatusOK, "success", book.FormatBooks(books))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *bookHandler) GetBook(c *gin.Context){
+	var input book.GetBookDetailInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	bookDetail, err := h.service.GetBookByID(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatBookDetail(bookDetail))
+	c.JSON(http.StatusOK, response)
+}
