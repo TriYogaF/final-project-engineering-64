@@ -1,29 +1,75 @@
+<<<<<<< HEAD
+import React from 'react'
+import { Navbar, Form, FormControl,  Nav } from 'react-bootstrap'
+import About from '../pages/About';
+import Content from '../pages/Content';
+import UploadBook from "../pages/UploadBook";
+import Login from "../pages/Login";
+import Profile from "../pages/Profile";
+=======
 import React from "react";
 import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
 import Diary from "../assets/Diary.png";
 
+>>>>>>> main
 
-export default function NavBar(){
+export const NavItem = () => {
+   let itemNav=[
+      {
+         href: "/about",
+         text: "What is Diary?",
+         element: About
+      },
+      {
+         href: "/",
+         text: "Beranda",
+         element: Content
+      },
+      {
+         href: "/UploadBook",
+         text: "Upload Karya",
+         element: UploadBook
+      }, 
+      {
+         href: "/login",
+         text: "Login",
+         element: Login
+      },
+      {
+         href: "/profile",
+         text: "Profile",
+         element: Profile
+      } 
+   ]
+   return itemNav
+}
+export default function NavBar(data){
    return (
       <>
-         <Navbar style={{ backgroundColor: "#FFFFFF", paddingLeft: "5vw"}}>
+         <Navbar style={{ backgroundColor: "#FFFFFF"}}>
                <Navbar.Brand href="App.js">
-                  <img src={Diary} alt="logo" width="100px" className="img-fluid m-3 " />
+                  <img src="../assets/img/diary.png" alt="logo" width="150px" className="img-fluid m-3" />
                </Navbar.Brand>  
                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                <Navbar.Collapse id="basic-navbar-nav">
-                  <Form className="d-inline mx-2 ms-auto">
-                     <FormControl type="text" placeholder="Search" />
+                  <Form>
+                     <div className='gh-search-forms'><i class="fa fa-search"></i><input className='gh-input' type="text" placeholder="Search..." /></div>
+                     
                   </Form>
-                  <div className="vr" />
                </Navbar.Collapse>
          </Navbar>
          <Navbar style={{ backgroundColor: "#FFFFFF" }} className="text-center justify-content-center">
-            <Nav className="me-allign-center">
-               <Nav.Link href="#diary">What is Diary?</Nav.Link>
-               <Nav.Link href="App.js">Beranda</Nav.Link>
-               <Nav.Link href="#karya">Upload Karya</Nav.Link>
-               <Nav.Link href="#akun">Account</Nav.Link>
+            <Nav className="me-align-center gh-nav" >
+               {
+               NavItem().map(
+                  item => {
+                  if (data.currPath.toLowerCase() == item.href.toLowerCase()){
+                      return <Nav.Link key={item.text} className="gh-navlink active" href={item.href}>{item.text}</Nav.Link>
+                     } else{
+                       return  <Nav.Link key={item.text} className="gh-navlink" href={item.href}>{item.text}</Nav.Link>
+                     }
+                  })
+               }
             </Nav>
          </Navbar>
       </>

@@ -1,9 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import Book from "../assets/logoputih.png";
-import Text from "../assets/textdiary.png";
-import "../pages/About.css";
-import { Container, Form, Row, Col, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 const sizeImg = {
   width: "15%",
@@ -22,8 +19,8 @@ export default function About() {
         <style>{"body { background-color:#304D63 ; }"}</style>
       </Helmet>
       <Container>
-        <img src={Book} style={sizeImg} className="img"></img>
-        <img src={Text} style={sizeImg1} className="textD"></img>
+        <img src="../assets/img/logoputih.png" style={sizeImg} className="gh-img"></img>
+        <img src="../assets/img/textdiary.png" style={sizeImg1} className="gh-textD"></img>
       </Container>
     </div>
   );

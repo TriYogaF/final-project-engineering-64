@@ -1,5 +1,4 @@
 import React from "react";
-import Book from "../assets/book.png";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 
 const sizeImg = {
@@ -7,26 +6,19 @@ const sizeImg = {
   height: "50%",
 };
 
-const primaryColor = {
-  backgroundColor: "#304D63",
-};
-
-const secondaryColor = {
-  backgroundColor: "#69BB9E",
-};
 
 export default function Register() {
   return (
-    <main style={primaryColor}>
+    <main className="gh-bg-primary">
       <Container className="pb-5">
         <Row className="align-items-center">
           <Col className="col-7">
             <h1 className="p-5 text-light">Membaca memperkaya ilmuku dan memperluas imajinasiku</h1>
-            <img src={Book} style={sizeImg} className="float-end"></img>
+            <img src="../assets/img/book.png" style={sizeImg} className="float-end"></img>
           </Col>
           <Col className="bg-light m-5 rounded-2">
             <Container className="p-4 mt-2 mb-5">
-              <div className="rounded-2 py-2 mb-5" style={secondaryColor}>
+              <div className="rounded-2 py-2 mb-5 gh-bg-secondary">
                 <h2 className="text-center text-light">Register</h2>
               </div>
               <Form className="d-grid">
@@ -54,7 +46,7 @@ export default function Register() {
                   <Form.Label>Confirm Password</Form.Label>
                   <Form.Control type="password" placeholder="Password" />
                 </Form.Group>
-                <Button variant="light" className="text-light" style={secondaryColor} type="submit">
+                <Button variant="light" className="text-light gh-bg-secondary" type="submit">
                   Submit
                 </Button>
               </Form>

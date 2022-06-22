@@ -1,7 +1,5 @@
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import Header from "../component/Header";
-import Footer from "../component/Footer";
-
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import React from 'react';
 export default function Content() {
   return (
     <>
