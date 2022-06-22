@@ -8,9 +8,9 @@ type Book struct {
 	Title      string
 	Writer     string
 	Pages      int
-	Sypnosis   string
-	CoverImage *string
-	File       *string
+	Synopsis   string
+	CoverImage string
+	File       string
 	Status     string
 	Slug       string
 	CreatedAt  time.Time

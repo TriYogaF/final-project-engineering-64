@@ -1,11 +1,15 @@
 package book
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 type Repository interface {
 	FindAll() ([]Book, error)
 	FindByUserID(userID int) ([]Book, error)
 	FindByID(ID int) (Book, error)
+	Save(book Book) (Book, error)
 }
 
 type repository struct {
@@ -27,7 +31,7 @@ func (r *repository) FindAll() ([]Book, error) {
 	var books []Book
 	for rows.Next() {
 		var book Book
-		err := rows.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Sypnosis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
+		err := rows.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Synopsis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -51,7 +55,7 @@ func (r *repository) FindByUserID(userID int) ([]Book, error) {
 	var books []Book
 	for rows.Next() {
 		var book Book
-		err := rows.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Sypnosis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
+		err := rows.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Synopsis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -92,7 +96,7 @@ func (r *repository) FindByID(ID int) (Book, error){
 	
 	row := r.db.QueryRow("SELECT * FROM books WHERE id = ?", ID)
 
-	err := row.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Sypnosis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
+	err := row.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Synopsis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
 	if err != nil {
 		return book, err
 	}
@@ -102,6 +106,16 @@ func (r *repository) FindByID(ID int) (Book, error){
 		return book, err
 	}
 	book.Category = listCategory
+
+	return book, nil
+}
+
+func (r *repository) Save(book Book) (Book, error){
+	_, err := r.db.Exec("INSERT INTO books (user_id, title, writer, pages, synopsis, cover_image, file, status, slug, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)", book.UserID, book.Title, book.Writer, book.Pages, book.Synopsis, book.CoverImage, book.File, book.Status, book.Slug, time.Now(), time.Now())
+
+	if err != nil {
+		return book, err
+	}
 
 	return book, nil
 }

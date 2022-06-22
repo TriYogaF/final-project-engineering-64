@@ -51,3 +51,5 @@ func (h *bookHandler) GetBook(c *gin.Context){
 	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatBookDetail(bookDetail))
 	c.JSON(http.StatusOK, response)
 }
+
+// func (h *bookHandler) CreateBook(c *gin)

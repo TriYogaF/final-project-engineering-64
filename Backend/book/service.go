@@ -1,8 +1,15 @@
 package book
 
+import (
+	"fmt"
+
+	"github.com/gosimple/slug"
+)
+
 type Service interface {
 	GetBooks(userID int) ([]Book, error)
 	GetBookByID(input GetBookDetailInput) (Book, error)
+	CreateBook(input CreateBookInput) (Book, error)
 }
 
 type service struct {
@@ -39,4 +46,27 @@ func (s *service) GetBookByID(input GetBookDetailInput) (Book, error) {
 	}
 
 	return book, nil
+}
+
+func (s *service) CreateBook(input CreateBookInput) (Book, error) {
+	book := Book{}
+	book.Title = input.Title
+	book.Writer = input.Writer
+	book.Pages = input.Pages
+	book.Synopsis = input.Synopsis
+	book.Status = "Pending"
+	book.CoverImage = input.CoverImage
+	book.File = input.File
+	book.UserID = input.User.ID
+	
+	slugString := fmt.Sprintf("%s %d", input.Title, input.User.ID)
+	book.Slug = slug.Make(slugString)
+
+
+	newBook, err := s.repository.Save(book)
+	if err != nil {
+		return newBook, err
+	}
+
+	return newBook, nil
 }
