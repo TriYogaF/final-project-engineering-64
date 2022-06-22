@@ -1,6 +1,7 @@
-import React from 'react'
-import { Navbar, Form, FormControl,  Nav } from 'react-bootstrap'
-import Diary from '../assets/Diary.png'
+import React from "react";
+import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
+import Diary from "../assets/Diary.png";
+
 
 export default function NavBar(){
    return (
@@ -28,3 +29,4 @@ export default function NavBar(){
       </>
    )
 }
+
