@@ -1,6 +1,8 @@
-import Navbar from "./component/NavBar";
-import Content from "./pages/Content";
 
+import Navbar from './component/NavBar';
+//import Header from './pages/Header';
+import Content from './pages/Content';
+import About from './pages/About';
 import UploadBook from "./pages/UploadBook";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -17,6 +19,7 @@ function App() {
           <Route path="/uploadbook" element={<UploadBook />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/about" element={<About />} />
           <Route path="/description" element={<DescriptionBook />} />
         </Routes>
       </div>
