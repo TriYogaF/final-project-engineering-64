@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { Route, Routes } from "react-router-dom";
 import DescriptionBook from "./pages/DescriptionBook";
+import ReadingSite from "./pages/ReadingSite";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/description" element={<DescriptionBook />} />
+          <Route path="/readingsite" element={<ReadingSite />} />
         </Routes>
       </div>
     </main>
