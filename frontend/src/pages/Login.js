@@ -6,8 +6,7 @@ const sizeImg = {
   height: "50%",
 };
 
-
-export default function Register() {
+export default function Login() {
   return (
     <section className="gh-section">
       <Container className="pb-5">
