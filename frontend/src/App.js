@@ -2,6 +2,8 @@ import Content from "./pages/Content";
 import UploadBook from "./pages/UploadBook";
 import Register from "./pages/Register";
 // import Login from "./pages/Login";
+import DescriptionBook from "./pages/DescriptionBook";
+import ReadingSite from "./pages/ReadingSite";
 import Admin from "./pages/Admin/Admin";
 //import Header from './pages/Header';
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -40,6 +42,8 @@ function App() {
           <Route path="/" element={<Content />} />
           <Route path="/uploadbook" element={<UploadBook />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/description" element={<DescriptionBook />} />
+          <Route path="/readingsite" element={<ReadingSite />} />
           <Route path="/admin" element={<Admin />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="approved" element={<Approved />} />
