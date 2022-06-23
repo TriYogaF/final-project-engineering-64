@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import Book from "../assets/book.png";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import axios from "../api/axios";
 
@@ -13,6 +12,9 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
 // const BASE_URL = "http://quiet-woodland-87309.herokuapp.com/api/v1";
 const REGISTER_URL = "/users";
+
+const primaryColor = { backgroundColor: "#304D63" };
+const secondaryColor = { backgroundColor: "#304D63" };
 
 export default function Register() {
   const nameRef = useRef();
@@ -112,7 +114,7 @@ export default function Register() {
             <Row className="align-items-center">
               <Col className="col-7">
                 <h1 className="p-5 text-light">Membaca memperkaya ilmuku dan memperluas imajinasiku</h1>
-                <img src={Book} style={sizeImg} className="float-end"></img>
+                <img src="../assets/img/book.png" style={sizeImg} className="float-end"></img>
               </Col>
               <Col className="bg-light m-5 rounded-2">
                 <Container className="p-4 mt-2 mb-5">
