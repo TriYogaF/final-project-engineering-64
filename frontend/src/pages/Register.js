@@ -118,10 +118,10 @@ export default function Register() {
               </Col>
               <Col className="bg-light m-5 rounded-2">
                 <Container className="p-4 mt-2 mb-5">
+                  <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                    {errMsg}
+                  </p>
                   <div className="rounded-2 py-2 mb-5" style={secondaryColor}>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-                      {errMsg}
-                    </p>
                     <h2 className="text-center text-light">Register</h2>
                   </div>
                   <Form onSubmit={handleSubmit} className="d-grid">
