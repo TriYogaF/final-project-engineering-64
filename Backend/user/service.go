@@ -11,6 +11,7 @@ type Service interface {
 	Login(input LoginInput) (User, error)
 	IsEmailAvailable(input CheckEmailInput) (bool, error)
 	SaveAvatar(ID int, fileLocation string) (User, error)
+	GetUserByID(ID int) (User, error)
 }
 
 type service struct {
@@ -34,12 +35,23 @@ func (s *service) RegisterUser(input RegisterUserInput) (User, error) {
 	user.PasswordHash = string(passwordHash)
 	user.Role = "user"
 
+	CheckEmail, _ := s.repository.FindByEmail(user.Email)
+	if CheckEmail.ID > 0 {
+		return CheckEmail, errors.New("The email you are using is already registered")
+	}
+
+
 	newUser, err := s.repository.Save(user)
 	if err != nil {
 		return newUser, err
 	}
 
-	return newUser, nil
+	userData, err := s.repository.FindByEmail(newUser.Email)
+	if err != nil {
+		return user, err
+	}
+
+	return userData, nil
 
 }
 
@@ -49,17 +61,17 @@ func (s *service) Login(input LoginInput) (User, error){
 	password := input.Password
 
 	user, err := s.repository.FindByEmail(email)
-	if err != nil {
-		return user, err
-	}
-
 	if user.ID == 0 {
 		return user, errors.New("No user found on that email")
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
 		return user, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+	if err != nil {
+		return user, errors.New("Password does not match")
 	}
 
 	return user, nil
@@ -102,6 +114,19 @@ func (s *service) IsEmailAvailable(input CheckEmailInput) (bool, error){
 
 		return updateUser, nil
 	}
+
+func (s *service) GetUserByID(ID int) (User, error){
+	user, err := s.repository.FindByID(ID)
+	if err != nil {
+		return user, err
+	}
+
+	if user.ID == 0 {
+		return user, errors.New("No user found on that ID")
+	}
+
+	return user, nil
+}
 
 
 // mapping struct input ke strcut user

@@ -8,14 +8,6 @@ const sizeImg = {
   height: "50%",
 };
 
-const primaryColor = {
-  backgroundColor: "#304D63",
-};
-
-const secondaryColor = {
-  backgroundColor: "#69BB9E",
-};
-
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;

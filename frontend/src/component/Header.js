@@ -1,6 +1,3 @@
-import Book from '../assets/book.png'
-// import Image from '../assets/image.png'
-// import Image2 from '../assets/image2.png'
 
 const size = {
    sm: {
@@ -25,7 +22,7 @@ export default function Content() {
                <a href="/" className="btn btn-success mt-1 py-3 px-5">Get Started</a>
             </div>
             <div className="col-4 text-center text-sm-right ms-auto mb-5 mt-5">
-               <img style={size.md} src={Book} alt="" />
+               <img style={size.md} src="/assets/img/book.png" alt="Book" />
             </div>
             <div className="row text-center" style={{ backgroundColor: "#304D63" }}>
                <h5 className="text-white">Temukan buku terbaik dan bahan bacaan terbaik</h5>
