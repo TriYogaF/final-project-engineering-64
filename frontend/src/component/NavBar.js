@@ -48,7 +48,7 @@ export default function NavBar(data) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Form>
             <div className="gh-search-forms">
-              <i class="fa fa-search"></i>
+              <i className="fa fa-search"></i>
               <input className="gh-input" type="text" placeholder="Search..." />
             </div>
           </Form>
