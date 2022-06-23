@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import Book from "../assets/book.png";
 
 export default function DescriptionBook() {
   return (
@@ -10,7 +9,7 @@ export default function DescriptionBook() {
           <Card className="border-2 border-dark pt-2 pb-5">
             <Row>
               <Col>
-                <Card.Img variant="top" src={Book} />
+                <Card.Img variant="top" src="/assets/img/book.png" />
               </Col>
               <Col>
                 <Card.Body>
