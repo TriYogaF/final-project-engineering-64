@@ -15,7 +15,7 @@ type Book struct {
 	Slug       string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
-	Category   []string
+	Category   string
 }
 
 type BookCategory struct {

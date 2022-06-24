@@ -7,11 +7,10 @@ type GetBookDetailInput struct {
 }
 
 type CreateBookInput struct {
-	Title      string `json:"title"`
-	Writer     string `json:"writer"`
-	Pages      int    `json:"pages"`
-	Synopsis   string `json:"synopsis"`
-	CoverImage string `json:"cover_image"`
-	File       string `json:"file"`
+	Title      string `json:"title" binding:"required"`
+	Writer     string `json:"writer" binding:"required"`
+	Pages      int    `json:"pages" binding:"required"`
+	Synopsis   string `json:"synopsis" binding:"required"`
 	User       user.User
+	Category   []string `json:"category" binding:"required"`
 }
