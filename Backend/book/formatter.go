@@ -65,3 +65,20 @@ func FormatBookDetail(book Book) BookDetailFormatter {
 
 	return bookDetailFormatter
 }
+
+type ReadBookFormatter struct{
+	ID 			int 	`json:"id"`
+	Title		string 	`json:"title"`
+	Pages 		int 	`json:"pages"`
+	File 		string `json:"file"`
+}
+
+func FormatReadBook(book Book) ReadBookFormatter{
+	readBookFormatter := ReadBookFormatter{}
+	readBookFormatter.ID = book.ID
+	readBookFormatter.Title = book.Title
+	readBookFormatter.Pages = book.Pages
+	readBookFormatter.File = book.File
+
+	return readBookFormatter
+}

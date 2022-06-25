@@ -85,17 +85,6 @@ func (r *repository) FindCategories(bookID int) (string, error) {
 			return category, err
 		}
 
-	// defer rows.Close()
-
-	// var categories []string
-	// for rows.Next() {
-	// 	var category string
-	// 	err := rows.Scan(&category)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	categories = append(categories, category)
-	// }
 	return category, nil
 
 }
@@ -111,13 +100,7 @@ func (r *repository) FindByID(ID int) (Book, error){
 	if err != nil {
 		return book, err
 	}
-
-	// listCategory, err := r.FindCategories(book.ID)
-	// if err != nil {
-	// 	return book, err
-	// }
-	// book.Category = listCategory
-
+	
 	return book, nil
 }
 

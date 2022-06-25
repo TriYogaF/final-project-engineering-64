@@ -212,6 +212,25 @@ func (h *bookHandler) Savefile(c *gin.Context) {
 	response := helper.APIResponse("Successfully upload image", http.StatusOK, "success", data)
 	c.JSON(http.StatusOK, response)
 
+}
 
+func (h *bookHandler) GetReadBook(c *gin.Context){
+	var input book.GetBookDetailInput
 
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	bookData, err := h.service.GetBookByID(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatReadBook(bookData))
+	c.JSON(http.StatusOK, response)
 }
