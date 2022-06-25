@@ -14,6 +14,7 @@ type Service interface {
 	CreateBookCategory(input CreateBookInput, bookID int) ([]string, error)
 	SaveImageCover(ID int, fileLocation string) (Book, error)
 	SaveBookfile(ID int, fileLocation string) (Book, error)
+	UpdateStatus(status GetBookStatusInput) (Book, error)
 }
 
 type service struct {
@@ -112,6 +113,27 @@ func (s *service) SaveBookfile(ID int, fileLocation string) (Book, error){
 
 		// update atribute ImageCover 
 		book.File = fileLocation
+
+		// save field ImageCover
+		updateBook, err := s.repository.Update(book)
+		if err != nil {
+			fmt.Println("error save data book")
+			return updateBook, err
+		}
+
+		return updateBook, nil
+}
+
+func (s *service) UpdateStatus(status GetBookStatusInput) (Book, error){
+		// find book by id
+		book, err := s.repository.FindByID(status.ID)
+		if err != nil {
+			fmt.Println("error search data book")
+			return book, err
+		}
+
+		// update atribute Status
+		book.Status = status.Status
 
 		// save field ImageCover
 		updateBook, err := s.repository.Update(book)

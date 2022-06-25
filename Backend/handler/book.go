@@ -234,3 +234,27 @@ func (h *bookHandler) GetReadBook(c *gin.Context){
 	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatReadBook(bookData))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *bookHandler) UpdateBookStatus(c *gin.Context){
+	var input book.GetBookStatusInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to update book status", http.StatusUnprocessableEntity, "error", errorMessage)
+		 c.JSON(http.StatusUnprocessableEntity, response)
+		 return
+	}
+
+	updateBook, err := h.service.UpdateStatus(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to update book status", http.StatusBadRequest, "error", nil)
+		 c.JSON(http.StatusBadRequest, response)
+		 return
+	}
+
+	response := helper.APIResponse("Success to create new book", http.StatusOK, "success", book.FormatBook(updateBook))
+	c.JSON(http.StatusOK, response)
+}

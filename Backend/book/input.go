@@ -14,3 +14,8 @@ type CreateBookInput struct {
 	User       user.User
 	Category   []string `json:"category" binding:"required"`
 }
+
+type GetBookStatusInput struct {
+	ID int `uri:"id" binding:"required"`
+	Status string `uri:"status" binding:"required"`
+}

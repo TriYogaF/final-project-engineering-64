@@ -52,6 +52,7 @@ func main() {
 	api.POST("/books/upload-image/:id", authMiddleware(authService, userService), bookHandler.SaveImageCover)
 	api.POST("/books/file/:id", authMiddleware(authService, userService), bookHandler.Savefile)
 	api.GET("/books/read/:id", authMiddleware(authService, userService), bookHandler.GetReadBook)
+	api.POST("/books/update-status", authMiddleware(authService, userService), bookHandler.UpdateBookStatus)
 
 	router.Run()
 
