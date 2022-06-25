@@ -278,3 +278,67 @@ func (h *bookHandler) GetBookByTitle(c *gin.Context) {
 	response := helper.APIResponse("List of Books", http.StatusOK, "success", book.FormatBooks(books))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *bookHandler) GetBookByCategoryID(c *gin.Context) {
+	var input book.GetBookDetailInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	books, err := h.service.GetBookByCategoryID(input)
+	if err != nil {
+		response := helper.APIResponse("Error to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("List of Books", http.StatusOK, "success", book.FormatBooks(books))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *bookHandler) UpdateBook(c *gin.Context) {
+	var input book.CreateBookInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to update book", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	var bookID book.GetBookDetailInput
+	err = c.ShouldBindUri(&bookID)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	currentUser := c.MustGet("CurrentUser").(user.User)
+	input.User = currentUser
+
+	updateBook, err := h.service.UpdateBook(input, bookID.ID)
+	if err != nil {
+		response := helper.APIResponse("Failed to update book", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	updateCategory, err := h.service.UpdateBookCategory(input, updateBook.ID)
+	log.Println(err)
+	if err != nil {
+		response := helper.APIResponse("Failed to update book's category", http.StatusBadRequest, "error", updateCategory)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to update book", http.StatusOK, "success", book.FormatBook(updateBook))
+	c.JSON(http.StatusOK, response)
+}

@@ -40,6 +40,7 @@ func main() {
 	router.Use(cors.Default())
 	router.Static("images", "./images")
 	api := router.Group("api/v1")
+	// users endpoint
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
@@ -54,6 +55,8 @@ func main() {
 	api.GET("/books/read/:id", authMiddleware(authService, userService), bookHandler.GetReadBook)
 	api.POST("/books/update-status", authMiddleware(authService, userService), bookHandler.UpdateBookStatus)
 	api.POST("/books/search", authMiddleware(authService, userService), bookHandler.GetBookByTitle)
+	api.GET("/books/category/:id", bookHandler.GetBookByCategoryID)
+	api.POST("/books/update/:id", authMiddleware(authService, userService), bookHandler.UpdateBook)
 
 	router.Run()
 

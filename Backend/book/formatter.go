@@ -6,7 +6,7 @@ type BookFormatter struct {
 	ID         int       `json:"id"`
 	Title      string    `json:"title"`
 	Writer     string    `json:"writer"`
-	CoverImage string   `json:"cover_image"`
+	CoverImage string    `json:"cover_image"`
 	Slug       string    `json:"slug"`
 	Status     string    `json:"status"`
 	CreatedAt  time.Time `json:"created_at"`
@@ -37,18 +37,18 @@ func FormatBooks(books []Book) []BookFormatter {
 	return booksFormatter
 }
 
-type BookDetailFormatter struct{
-	ID 			int 	`json:"id"`
-	Title		string 	`json:"title"`
-	Writer 		string 	`json:"writer"`
-	Pages 		int 	`json:"pages"`
-	Synopsis 	string 	`json:"synopsis"`
-	CoverImage 	string	`json:"cover_image"`
-	File 		string `json:"file"`
-	Status 		string `json:"status"`
-	Slug 		string `json:"slug"`
-	CreatedAt 	time.Time `json:"created_at"`
-	Category 	string `json:"category"`
+type BookDetailFormatter struct {
+	ID         int       `json:"id"`
+	Title      string    `json:"title"`
+	Writer     string    `json:"writer"`
+	Pages      int       `json:"pages"`
+	Synopsis   string    `json:"synopsis"`
+	CoverImage string    `json:"cover_image"`
+	File       string    `json:"file"`
+	Status     string    `json:"status"`
+	Slug       string    `json:"slug"`
+	CreatedAt  time.Time `json:"created_at"`
+	Category   []string  `json:"category"`
 }
 
 func FormatBookDetail(book Book) BookDetailFormatter {
@@ -68,14 +68,14 @@ func FormatBookDetail(book Book) BookDetailFormatter {
 	return bookDetailFormatter
 }
 
-type ReadBookFormatter struct{
-	ID 			int 	`json:"id"`
-	Title		string 	`json:"title"`
-	Pages 		int 	`json:"pages"`
-	File 		string `json:"file"`
+type ReadBookFormatter struct {
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	Pages int    `json:"pages"`
+	File  string `json:"file"`
 }
 
-func FormatReadBook(book Book) ReadBookFormatter{
+func FormatReadBook(book Book) ReadBookFormatter {
 	readBookFormatter := ReadBookFormatter{}
 	readBookFormatter.ID = book.ID
 	readBookFormatter.Title = book.Title

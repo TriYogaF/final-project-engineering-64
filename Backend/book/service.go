@@ -2,6 +2,8 @@ package book
 
 import (
 	"fmt"
+	"log"
+	"strconv"
 
 	"github.com/gosimple/slug"
 )
@@ -16,6 +18,9 @@ type Service interface {
 	SaveBookfile(ID int, fileLocation string) (Book, error)
 	UpdateStatus(status GetBookStatusInput) (Book, error)
 	GetBookByTitle(input GetSearchBookInput) ([]Book, error)
+	GetBookByCategoryID(input GetBookDetailInput) ([]Book, error)
+	UpdateBook(input CreateBookInput, bookID int) (Book, error)
+	UpdateBookCategory(input CreateBookInput, bookID int) ([]string, error)
 }
 
 type service struct {
@@ -154,4 +159,63 @@ func (s *service) GetBookByTitle(input GetSearchBookInput) ([]Book, error) {
 	}
 
 	return book, nil
+}
+
+func (s *service) GetBookByCategoryID(input GetBookDetailInput) ([]Book, error) {
+	book, err := s.repository.FindByCategoryID(input.ID)
+
+	if err != nil {
+		return book, err
+	}
+
+	return book, nil
+}
+
+func (s *service) UpdateBook(input CreateBookInput, bookID int) (Book, error) {
+	// find book by id
+	book, err := s.repository.FindByID(bookID)
+	if err != nil {
+		return book, err
+	}
+
+	book.Title = input.Title
+	book.Writer = input.Writer
+	book.Pages = input.Pages
+	book.Synopsis = input.Synopsis
+
+	slugString := fmt.Sprintf("%s %d", input.Title, input.User.ID)
+	book.Slug = slug.Make(slugString)
+
+	// save field
+	updateBook, err := s.repository.Update(book)
+	if err != nil {
+		return updateBook, err
+	}
+
+	return updateBook, nil
+}
+
+func (s *service) UpdateBookCategory(input CreateBookInput, bookID int) ([]string, error) {
+	var categories []string
+	for _, category := range input.Category {
+		categoryInt, _ := strconv.Atoi(category)
+		find, _ := s.repository.FindBookCategoryByID(bookID, categoryInt)
+		log.Println(find)
+
+		if find.ID == 0 {
+			categories = append(categories, category)
+		}
+
+	}
+
+	if categories != nil {
+		_, err := s.repository.SaveBookCategory(categories, bookID)
+		log.Println(categories)
+		log.Println(err)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return input.Category, nil
 }

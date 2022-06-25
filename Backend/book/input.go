@@ -12,7 +12,7 @@ type CreateBookInput struct {
 	Pages    int    `json:"pages" binding:"required"`
 	Synopsis string `json:"synopsis" binding:"required"`
 	User     user.User
-	Category []string `json:"category" binding:"required"`
+	Category []string `json:"category"`
 }
 
 type GetBookStatusInput struct {

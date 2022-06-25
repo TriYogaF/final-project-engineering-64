@@ -3,7 +3,6 @@ package book
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -17,6 +16,9 @@ type Repository interface {
 	SaveBookCategory(categories []string, ID int) ([]string, error)
 	Update(book Book) (Book, error)
 	FindByTitle(title string) ([]Book, error)
+	FindByCategoryID(ID int) ([]Book, error)
+	FindCategories(bookID int) ([]string, error)
+	FindBookCategoryByID(bookID int, categoryID int) (BookCategory, error)
 }
 
 type repository struct {
@@ -77,16 +79,25 @@ func (r *repository) FindByUserID(userID int) ([]Book, error) {
 }
 
 // Load relation data Category
-func (r *repository) FindCategories(bookID int) (string, error) {
-	row := r.db.QueryRow("SELECT c.name as category FROM book_categories as a LEFT JOIN categories as c ON a.category_id = c.id WHERE a.book_id = ?", bookID)
-
-	var category string
-	err := row.Scan(&category)
+func (r *repository) FindCategories(bookID int) ([]string, error) {
+	rows, err := r.db.Query("SELECT c.name as category FROM book_categories as a LEFT JOIN categories as c ON a.category_id = c.id WHERE a.book_id = ?", bookID)
 	if err != nil {
-		return category, err
+		return nil, err
+	}
+	defer rows.Close()
+
+	var categories []string
+	for rows.Next() {
+		var category string
+		err := rows.Scan(&category)
+		if err != nil {
+			return nil, err
+		}
+
+		categories = append(categories, category)
 	}
 
-	return category, nil
+	return categories, nil
 
 }
 
@@ -96,10 +107,15 @@ func (r *repository) FindByID(ID int) (Book, error) {
 	row := r.db.QueryRow("SELECT * FROM books WHERE id = ? ", ID)
 
 	err := row.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Synopsis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
-	log.Println(err)
 	if err != nil {
 		return book, err
 	}
+
+	listCategory, err := r.FindCategories(book.ID)
+	if err != nil {
+		return book, err
+	}
+	book.Category = listCategory
 
 	return book, nil
 }
@@ -152,7 +168,6 @@ func (r *repository) Update(book Book) (Book, error) {
 }
 
 func (r *repository) FindByTitle(title string) ([]Book, error) {
-	// title = fmt.Sprintf("'%%s%'", title)
 	rows, err := r.db.Query("SELECT * FROM books WHERE title LIKE ? and status = 'Active'", "%"+title+"%")
 	fmt.Println(rows)
 	if err != nil {
@@ -171,4 +186,38 @@ func (r *repository) FindByTitle(title string) ([]Book, error) {
 		books = append(books, book)
 	}
 	return books, nil
+}
+
+func (r *repository) FindByCategoryID(ID int) ([]Book, error) {
+	rows, err := r.db.Query("SELECT b.* FROM book_categories as a LEFT JOIN books as b ON a.book_id = b.id LEFT JOIN categories as c ON a.category_id = c.id WHERE a.category_id = ? and b.status = 'Active'", ID)
+	fmt.Println(rows)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var books []Book
+	for rows.Next() {
+		var book Book
+		err := rows.Scan(&book.ID, &book.UserID, &book.Title, &book.Writer, &book.Pages, &book.Synopsis, &book.CoverImage, &book.File, &book.Status, &book.Slug, &book.CreatedAt, &book.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		books = append(books, book)
+	}
+	return books, nil
+}
+
+func (r *repository) FindBookCategoryByID(bookID int, categoryID int) (BookCategory, error) {
+	var book BookCategory
+
+	row := r.db.QueryRow("SELECT * FROM book_categories WHERE book_id = ? and category_id = ?", bookID, categoryID)
+
+	err := row.Scan(&book.ID, &book.BookID, &book.CategoryID)
+	if err != nil {
+		return book, err
+	}
+
+	return book, nil
 }
