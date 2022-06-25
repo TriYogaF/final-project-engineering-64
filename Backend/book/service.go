@@ -15,6 +15,7 @@ type Service interface {
 	SaveImageCover(ID int, fileLocation string) (Book, error)
 	SaveBookfile(ID int, fileLocation string) (Book, error)
 	UpdateStatus(status GetBookStatusInput) (Book, error)
+	GetBookByTitle(input GetSearchBookInput) ([]Book, error)
 }
 
 type service struct {
@@ -143,4 +144,14 @@ func (s *service) UpdateStatus(status GetBookStatusInput) (Book, error) {
 	}
 
 	return updateBook, nil
+}
+
+func (s *service) GetBookByTitle(input GetSearchBookInput) ([]Book, error) {
+	book, err := s.repository.FindByTitle(input.Title)
+
+	if err != nil {
+		return book, err
+	}
+
+	return book, nil
 }

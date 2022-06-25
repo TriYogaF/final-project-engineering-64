@@ -44,7 +44,7 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
 	api.POST("/upload-avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
-
+	// books endpoint
 	api.GET("/books", bookHandler.GetBooks)
 	api.GET("/books/user/:id", bookHandler.GetUserBooks)
 	api.GET("/books/:id", bookHandler.GetBook)
@@ -53,6 +53,7 @@ func main() {
 	api.POST("/books/file/:id", authMiddleware(authService, userService), bookHandler.Savefile)
 	api.GET("/books/read/:id", authMiddleware(authService, userService), bookHandler.GetReadBook)
 	api.POST("/books/update-status", authMiddleware(authService, userService), bookHandler.UpdateBookStatus)
+	api.POST("/books/search", authMiddleware(authService, userService), bookHandler.GetBookByTitle)
 
 	router.Run()
 
