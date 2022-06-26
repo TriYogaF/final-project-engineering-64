@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"diary/user"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -22,6 +23,10 @@ type Repository interface {
 	FindBookCategoryByID(bookID int, categoryID int) (BookCategory, error)
 	SaveHistory(readHistory History) (History, error)
 	GetLastReader(history History) ([]user.User, error)
+	GetReview(bookID int, UserID int) (Review, error)
+	SaveReview(review Review) (Review, error)
+	UpdateReview(review Review) (Review, error)
+	GetBookReview(bookID int) (int, error)
 }
 
 type repository struct {
@@ -47,11 +52,13 @@ func (r *repository) FindAll() ([]Book, error) {
 		if err != nil {
 			return nil, err
 		}
-		// listCategory, err := r.FindCategories(book.ID)
-		// if err != nil {
-		// 	return nil, err
-		// }
-		// book.Category = listCategory
+
+		score, err := r.GetBookReview(book.ID)
+		log.Println(err)
+		if err != nil {
+			return nil, err
+		}
+		book.Score = score
 		books = append(books, book)
 	}
 	return books, nil
@@ -71,11 +78,13 @@ func (r *repository) FindByUserID(userID int) ([]Book, error) {
 		if err != nil {
 			return nil, err
 		}
-		// listCategory, err := r.FindCategories(book.ID)
-		// if err != nil {
-		// 	return nil, err
-		// }
-		// book.Category = listCategory
+
+		score, err := r.GetBookReview(book.ID)
+		log.Println(err)
+		if err != nil {
+			return nil, err
+		}
+		book.Score = score
 		books = append(books, book)
 	}
 	return books, nil
@@ -186,6 +195,13 @@ func (r *repository) FindByTitle(title string) ([]Book, error) {
 			return nil, err
 		}
 
+		score, err := r.GetBookReview(book.ID)
+		log.Println(err)
+		if err != nil {
+			return nil, err
+		}
+		book.Score = score
+
 		books = append(books, book)
 	}
 	return books, nil
@@ -206,6 +222,13 @@ func (r *repository) FindByCategoryID(ID int) ([]Book, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		score, err := r.GetBookReview(book.ID)
+		log.Println(err)
+		if err != nil {
+			return nil, err
+		}
+		book.Score = score
 
 		books = append(books, book)
 	}
@@ -262,4 +285,56 @@ func (r *repository) GetLastReader(history History) ([]user.User, error) {
 	}
 	return users, nil
 
+}
+
+func (r *repository) GetReview(bookID int, UserID int) (Review, error) {
+	var bookReview Review
+
+	row := r.db.QueryRow("SELECT * FROM book_reviews WHERE book_id = ? and user_id = ?", bookID, UserID)
+
+	err := row.Scan(&bookReview.ID, &bookReview.UserID, &bookReview.BookID, &bookReview.Score, &bookReview.CreatedAt, &bookReview.UpdatedAt)
+	if err != nil {
+		return bookReview, nil
+	}
+
+	return bookReview, nil
+}
+
+func (r *repository) SaveReview(review Review) (Review, error) {
+	save, err := r.db.Exec("INSERT INTO book_reviews (user_id, book_id, score, created_at, updated_at) VALUES (?,?,?,?,?)", review.UserID, review.BookID, review.Score, time.Now(), time.Now())
+
+	if err != nil {
+		return review, err
+	}
+
+	id, err := save.LastInsertId()
+	if err != nil {
+		return review, err
+	}
+
+	review.ID = int(id)
+
+	return review, nil
+}
+
+func (r *repository) UpdateReview(review Review) (Review, error) {
+	_, err := r.db.Exec("UPDATE book_reviews SET score = ?, updated_at = ? WHERE id = ?", review.Score, time.Now(), review.ID)
+
+	if err != nil {
+		return review, err
+	}
+
+	return review, nil
+}
+
+func (r *repository) GetBookReview(bookID int) (int, error) {
+	var score int
+	row := r.db.QueryRow("SELECT AVG(score) FROM book_reviews WHERE book_id = ?", bookID)
+
+	err := row.Scan(&score)
+	if err != nil {
+		return 0, nil
+	}
+
+	return score, nil
 }

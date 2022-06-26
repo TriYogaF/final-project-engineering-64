@@ -58,6 +58,7 @@ func main() {
 	api.GET("/books/category/:id", bookHandler.GetBookByCategoryID)
 	api.POST("/books/update/:id", authMiddleware(authService, userService), bookHandler.UpdateBook)
 	api.GET("/books/history/:id", authMiddleware(authService, userService), bookHandler.GetLastReader)
+	api.POST("/books/review", authMiddleware(authService, userService), bookHandler.SaveReview)
 
 	router.Run()
 

@@ -23,3 +23,9 @@ type GetBookStatusInput struct {
 type GetSearchBookInput struct {
 	Title string `json:"title" binding:"required"`
 }
+
+type GetReviewBookInput struct {
+	BookID int `json:"book_id" binding:"required"`
+	UserID int `json:"user_id"`
+	Score  int `json:"score" binding:"required"`
+}
