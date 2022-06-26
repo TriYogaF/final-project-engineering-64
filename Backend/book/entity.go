@@ -23,3 +23,10 @@ type BookCategory struct {
 	BookID     int
 	CategoryID int
 }
+
+type History struct {
+	ID        int
+	UserID    int
+	BookID    int
+	CreatedAt time.Time
+}

@@ -1,6 +1,7 @@
 package book
 
 import (
+	"diary/user"
 	"fmt"
 	"log"
 	"strconv"
@@ -21,6 +22,8 @@ type Service interface {
 	GetBookByCategoryID(input GetBookDetailInput) ([]Book, error)
 	UpdateBook(input CreateBookInput, bookID int) (Book, error)
 	UpdateBookCategory(input CreateBookInput, bookID int) ([]string, error)
+	SaveReadHistory(bookID int, UserID int) (History, error)
+	GetLastReader(bookID int, UserID int) ([]user.User, error)
 }
 
 type service struct {
@@ -218,4 +221,32 @@ func (s *service) UpdateBookCategory(input CreateBookInput, bookID int) ([]strin
 	}
 
 	return input.Category, nil
+}
+
+func (s *service) SaveReadHistory(bookID int, UserID int) (History, error) {
+	readHistory := History{}
+	readHistory.BookID = bookID
+	readHistory.UserID = UserID
+
+	saveHistory, err := s.repository.SaveHistory(readHistory)
+	if err != nil {
+		return saveHistory, err
+	}
+
+	return saveHistory, nil
+
+}
+
+func (s *service) GetLastReader(bookID int, UserID int) ([]user.User, error) {
+	lastReader := History{}
+	lastReader.BookID = bookID
+	lastReader.UserID = UserID
+
+	dataHistory, err := s.repository.GetLastReader(lastReader)
+	if err != nil {
+		return dataHistory, err
+	}
+
+	return dataHistory, nil
+
 }

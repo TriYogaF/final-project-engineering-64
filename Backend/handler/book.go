@@ -71,6 +71,15 @@ func (h *bookHandler) GetBook(c *gin.Context) {
 		return
 	}
 
+	currentUser := c.MustGet("CurrentUser").(user.User)
+
+	createHistory, err := h.service.SaveReadHistory(bookDetail.ID, currentUser.ID)
+	if err != nil {
+		response := helper.APIResponse("Failed to save read history", http.StatusBadRequest, "error", createHistory)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatBookDetail(bookDetail))
 	c.JSON(http.StatusOK, response)
 }
@@ -340,5 +349,28 @@ func (h *bookHandler) UpdateBook(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success to update book", http.StatusOK, "success", book.FormatBook(updateBook))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *bookHandler) GetLastReader(c *gin.Context) {
+	var input book.GetBookDetailInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get book's data history", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	currentUser := c.MustGet("CurrentUser").(user.User)
+
+	dataHistory, err := h.service.GetLastReader(input.ID, currentUser.ID)
+	if err != nil {
+		response := helper.APIResponse("Failed to save read history", http.StatusBadRequest, "error", dataHistory)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatLastReader(dataHistory))
 	c.JSON(http.StatusOK, response)
 }

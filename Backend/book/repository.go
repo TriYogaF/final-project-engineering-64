@@ -2,6 +2,7 @@ package book
 
 import (
 	"database/sql"
+	"diary/user"
 	"fmt"
 	"strconv"
 	"strings"
@@ -19,6 +20,8 @@ type Repository interface {
 	FindByCategoryID(ID int) ([]Book, error)
 	FindCategories(bookID int) ([]string, error)
 	FindBookCategoryByID(bookID int, categoryID int) (BookCategory, error)
+	SaveHistory(readHistory History) (History, error)
+	GetLastReader(history History) ([]user.User, error)
 }
 
 type repository struct {
@@ -220,4 +223,43 @@ func (r *repository) FindBookCategoryByID(bookID int, categoryID int) (BookCateg
 	}
 
 	return book, nil
+}
+
+func (r *repository) SaveHistory(readHistory History) (History, error) {
+	save, err := r.db.Exec("INSERT INTO history (book_id, user_id,  created_at) VALUES (?,?,?)", readHistory.BookID, readHistory.UserID, time.Now())
+
+	if err != nil {
+		return readHistory, err
+	}
+
+	id, err := save.LastInsertId()
+	if err != nil {
+		return readHistory, err
+	}
+
+	readHistory.ID = int(id)
+
+	return readHistory, nil
+}
+
+func (r *repository) GetLastReader(history History) ([]user.User, error) {
+	rows, err := r.db.Query("SELECT DISTINCT b.id, b.name, b.gender, b.file_avatar FROM history as a LEFT JOIN users as b ON a.user_id = b.id WHERE a.book_id = ?", history.BookID)
+	fmt.Println(rows)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []user.User
+	for rows.Next() {
+		var user user.User
+		err := rows.Scan(&user.ID, &user.Name, &user.Gender, &user.FileAvatar)
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+	return users, nil
+
 }

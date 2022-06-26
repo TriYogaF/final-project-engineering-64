@@ -1,6 +1,9 @@
 package book
 
-import "time"
+import (
+	"diary/user"
+	"time"
+)
 
 type BookFormatter struct {
 	ID         int       `json:"id"`
@@ -83,4 +86,29 @@ func FormatReadBook(book Book) ReadBookFormatter {
 	readBookFormatter.File = book.File
 
 	return readBookFormatter
+}
+
+type LastReaderFormatter struct {
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	Gender     string `json:"gender"`
+	FileAvatar string `json:"file_avatar"`
+	// Time       time.Time `json:"time"`
+}
+
+func FormatLastReader(users []user.User) []LastReaderFormatter {
+	lastReaders := []LastReaderFormatter{}
+
+	for _, user := range users {
+		lastReader := LastReaderFormatter{}
+		lastReader.ID = user.ID
+		lastReader.Name = user.Name
+		lastReader.Gender = user.Gender
+		lastReader.FileAvatar = user.FileAvatar
+		// lastReader.Time = user.CreatedAt
+
+		lastReaders = append(lastReaders, lastReader)
+	}
+
+	return lastReaders
 }
