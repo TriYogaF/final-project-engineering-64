@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import PDFViewer from "pdf-viewer-reactjs";
 
 export default function ReadingSite() {
@@ -8,7 +8,7 @@ export default function ReadingSite() {
       <Container className="py-5 border">
         <PDFViewer
           document={{
-            url: "https://arxiv.org/pdf/quant-ph/0410100.pdf",
+            url: "https://www.ets.org/Media/Tests/GRE/pdf/gre_research_validity_data.pdf",
           }}
           scale={1.3}
         />
