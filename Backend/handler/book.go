@@ -54,7 +54,7 @@ func (h *bookHandler) GetUserBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *bookHandler) GetBook(c *gin.Context){
+func (h *bookHandler) GetBook(c *gin.Context) {
 	var input book.GetBookDetailInput
 
 	err := c.ShouldBindUri(&input)
@@ -71,11 +71,20 @@ func (h *bookHandler) GetBook(c *gin.Context){
 		return
 	}
 
+	currentUser := c.MustGet("CurrentUser").(user.User)
+
+	createHistory, err := h.service.SaveReadHistory(bookDetail.ID, currentUser.ID)
+	if err != nil {
+		response := helper.APIResponse("Failed to save read history", http.StatusBadRequest, "error", createHistory)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatBookDetail(bookDetail))
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *bookHandler) CreateBook(c *gin.Context){
+func (h *bookHandler) CreateBook(c *gin.Context) {
 	var input book.CreateBookInput
 
 	err := c.ShouldBindJSON(&input)
@@ -84,26 +93,26 @@ func (h *bookHandler) CreateBook(c *gin.Context){
 		errorMessage := gin.H{"errors": errors}
 
 		response := helper.APIResponse("Failed to create new book", http.StatusUnprocessableEntity, "error", errorMessage)
-		 c.JSON(http.StatusUnprocessableEntity, response)
-		 return
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
 	}
 
 	currentUser := c.MustGet("CurrentUser").(user.User)
-	
+
 	input.User = currentUser
 
 	newBook, err := h.service.CreateBook(input)
 	if err != nil {
 		response := helper.APIResponse("Failed to create new book", http.StatusBadRequest, "error", nil)
-		 c.JSON(http.StatusBadRequest, response)
-		 return
+		c.JSON(http.StatusBadRequest, response)
+		return
 	}
 
 	newCategory, err := h.service.CreateBookCategory(input, newBook.ID)
 	if err != nil {
 		response := helper.APIResponse("Failed to create book's category", http.StatusBadRequest, "error", newCategory)
-		 c.JSON(http.StatusBadRequest, response)
-		 return
+		c.JSON(http.StatusBadRequest, response)
+		return
 	}
 
 	response := helper.APIResponse("Success to create new book", http.StatusOK, "success", book.FormatBook(newBook))
@@ -127,7 +136,7 @@ func (h *bookHandler) SaveImageCover(c *gin.Context) {
 
 		response := helper.APIResponse("Failed to upload image form file", http.StatusBadRequest, "error", data)
 		c.JSON(http.StatusBadRequest, response)
-		 return
+		return
 	}
 
 	// id by jwt
@@ -143,7 +152,7 @@ func (h *bookHandler) SaveImageCover(c *gin.Context) {
 
 		response := helper.APIResponse("Failed to upload image upload", http.StatusBadRequest, "error", data)
 		c.JSON(http.StatusBadRequest, response)
-		 return
+		return
 	}
 
 	_, err = h.service.SaveImageCover(input.ID, path)
@@ -153,7 +162,7 @@ func (h *bookHandler) SaveImageCover(c *gin.Context) {
 
 		response := helper.APIResponse("Failed to upload image send data", http.StatusBadRequest, "error", data)
 		c.JSON(http.StatusBadRequest, response)
-		 return
+		return
 	}
 
 	data := gin.H{"is_uploaded": true}
@@ -161,7 +170,6 @@ func (h *bookHandler) SaveImageCover(c *gin.Context) {
 	response := helper.APIResponse("Successfully upload image", http.StatusOK, "success", data)
 	c.JSON(http.StatusOK, response)
 }
-
 
 func (h *bookHandler) Savefile(c *gin.Context) {
 
@@ -180,7 +188,7 @@ func (h *bookHandler) Savefile(c *gin.Context) {
 
 		response := helper.APIResponse("Failed to upload file", http.StatusBadRequest, "error", data)
 		c.JSON(http.StatusBadRequest, response)
-		 return
+		return
 	}
 
 	// id by jwt
@@ -195,7 +203,7 @@ func (h *bookHandler) Savefile(c *gin.Context) {
 
 		response := helper.APIResponse("Failed to upload file", http.StatusBadRequest, "error", data)
 		c.JSON(http.StatusBadRequest, response)
-		 return
+		return
 	}
 
 	_, err = h.service.SaveBookfile(input.ID, path)
@@ -204,7 +212,7 @@ func (h *bookHandler) Savefile(c *gin.Context) {
 
 		response := helper.APIResponse("Failed to upload image send data", http.StatusBadRequest, "error", data)
 		c.JSON(http.StatusBadRequest, response)
-		 return
+		return
 	}
 
 	data := gin.H{"is_uploaded": true}
@@ -214,7 +222,7 @@ func (h *bookHandler) Savefile(c *gin.Context) {
 
 }
 
-func (h *bookHandler) GetReadBook(c *gin.Context){
+func (h *bookHandler) GetReadBook(c *gin.Context) {
 	var input book.GetBookDetailInput
 
 	err := c.ShouldBindUri(&input)
@@ -235,7 +243,7 @@ func (h *bookHandler) GetReadBook(c *gin.Context){
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *bookHandler) UpdateBookStatus(c *gin.Context){
+func (h *bookHandler) UpdateBookStatus(c *gin.Context) {
 	var input book.GetBookStatusInput
 
 	err := c.ShouldBindJSON(&input)
@@ -244,17 +252,125 @@ func (h *bookHandler) UpdateBookStatus(c *gin.Context){
 		errorMessage := gin.H{"errors": errors}
 
 		response := helper.APIResponse("Failed to update book status", http.StatusUnprocessableEntity, "error", errorMessage)
-		 c.JSON(http.StatusUnprocessableEntity, response)
-		 return
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
 	}
 
 	updateBook, err := h.service.UpdateStatus(input)
 	if err != nil {
 		response := helper.APIResponse("Failed to update book status", http.StatusBadRequest, "error", nil)
-		 c.JSON(http.StatusBadRequest, response)
-		 return
+		c.JSON(http.StatusBadRequest, response)
+		return
 	}
 
 	response := helper.APIResponse("Success to create new book", http.StatusOK, "success", book.FormatBook(updateBook))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *bookHandler) GetBookByTitle(c *gin.Context) {
+	var input book.GetSearchBookInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	books, err := h.service.GetBookByTitle(input)
+	if err != nil {
+		response := helper.APIResponse("Error to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("List of Books", http.StatusOK, "success", book.FormatBooks(books))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *bookHandler) GetBookByCategoryID(c *gin.Context) {
+	var input book.GetBookDetailInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	books, err := h.service.GetBookByCategoryID(input)
+	if err != nil {
+		response := helper.APIResponse("Error to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("List of Books", http.StatusOK, "success", book.FormatBooks(books))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *bookHandler) UpdateBook(c *gin.Context) {
+	var input book.CreateBookInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to update book", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	var bookID book.GetBookDetailInput
+	err = c.ShouldBindUri(&bookID)
+	if err != nil {
+		response := helper.APIResponse("Failed to get books data", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	currentUser := c.MustGet("CurrentUser").(user.User)
+	input.User = currentUser
+
+	updateBook, err := h.service.UpdateBook(input, bookID.ID)
+	if err != nil {
+		response := helper.APIResponse("Failed to update book", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	updateCategory, err := h.service.UpdateBookCategory(input, updateBook.ID)
+	log.Println(err)
+	if err != nil {
+		response := helper.APIResponse("Failed to update book's category", http.StatusBadRequest, "error", updateCategory)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to update book", http.StatusOK, "success", book.FormatBook(updateBook))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *bookHandler) GetLastReader(c *gin.Context) {
+	var input book.GetBookDetailInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get book's data history", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	currentUser := c.MustGet("CurrentUser").(user.User)
+
+	dataHistory, err := h.service.GetLastReader(input.ID, currentUser.ID)
+	if err != nil {
+		response := helper.APIResponse("Failed to save read history", http.StatusBadRequest, "error", dataHistory)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatLastReader(dataHistory))
 	c.JSON(http.StatusOK, response)
 }

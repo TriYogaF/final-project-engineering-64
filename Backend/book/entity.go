@@ -15,11 +15,18 @@ type Book struct {
 	Slug       string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
-	Category   string
+	Category   []string
 }
 
 type BookCategory struct {
 	ID         int
 	BookID     int
 	CategoryID int
+}
+
+type History struct {
+	ID        int
+	UserID    int
+	BookID    int
+	CreatedAt time.Time
 }

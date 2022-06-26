@@ -40,19 +40,24 @@ func main() {
 	router.Use(cors.Default())
 	router.Static("images", "./images")
 	api := router.Group("api/v1")
+	// users endpoint
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
 	api.POST("/upload-avatar", authMiddleware(authService, userService), userHandler.UploadAvatar)
-
+	// books endpoint
 	api.GET("/books", bookHandler.GetBooks)
 	api.GET("/books/user/:id", bookHandler.GetUserBooks)
-	api.GET("/books/:id", bookHandler.GetBook)
+	api.GET("/books/:id", authMiddleware(authService, userService), bookHandler.GetBook)
 	api.POST("/books", authMiddleware(authService, userService), bookHandler.CreateBook)
 	api.POST("/books/upload-image/:id", authMiddleware(authService, userService), bookHandler.SaveImageCover)
 	api.POST("/books/file/:id", authMiddleware(authService, userService), bookHandler.Savefile)
 	api.GET("/books/read/:id", authMiddleware(authService, userService), bookHandler.GetReadBook)
 	api.POST("/books/update-status", authMiddleware(authService, userService), bookHandler.UpdateBookStatus)
+	api.POST("/books/search", authMiddleware(authService, userService), bookHandler.GetBookByTitle)
+	api.GET("/books/category/:id", bookHandler.GetBookByCategoryID)
+	api.POST("/books/update/:id", authMiddleware(authService, userService), bookHandler.UpdateBook)
+	api.GET("/books/history/:id", authMiddleware(authService, userService), bookHandler.GetLastReader)
 
 	router.Run()
 
