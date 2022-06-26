@@ -39,11 +39,11 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Content />} />
           <Route element={<RequiredAuth allowedRoles={"user"} />}>
             {NavItem().map((item) => (
               <Route key={item.to} path={item.to} element={<item.element />} />
             ))}
+            <Route path="/" element={<Content />} />
             <Route path="/readingsite" element={<ReadingSite />} />
             <Route path="/description" element={<DescriptionBook />} />
             <Route path="/admin" element={<Admin />}>

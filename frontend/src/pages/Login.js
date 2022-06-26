@@ -9,7 +9,7 @@ const sizeImg = {
   height: "50%",
 };
 
-const LOGIN_URL = "/sessions";
+const LOGIN_URL = "/api/v1/sessions";
 
 export default function Login() {
   const { setAuth } = useAuth();

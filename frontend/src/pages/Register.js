@@ -11,7 +11,7 @@ const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{5,24}$/;
 const EMAIL_REGEX = /^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,}$/;
 // const BASE_URL = "http://quiet-woodland-87309.herokuapp.com/api/v1";
-const REGISTER_URL = "/users";
+const REGISTER_URL = "/api/v1/users";
 
 const primaryColor = { backgroundColor: "#304D63" };
 const secondaryColor = { backgroundColor: "#304D63" };
