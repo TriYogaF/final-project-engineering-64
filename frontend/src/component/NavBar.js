@@ -1,36 +1,38 @@
 import React from "react";
-import { Navbar, Form, FormControl, Nav } from "react-bootstrap";
-import Diary from "../assets/diary-admin.png";
+import { Navbar, Form, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
+// import Diary from "../assets/diary-admin.png";
 import About from "../pages/About";
-import Content from "../pages/Content";
-import UploadBook from "../pages/UploadBook";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
+import Content from "../pages/Content";
+import UploadBook from "../pages/UploadBook";
 
 export const NavItem = () => {
   let itemNav = [
     {
-      href: "/about",
+      to: "/about",
       text: "What is Diary?",
       element: About,
     },
     {
-      href: "/",
+      to: "/",
       text: "Beranda",
       element: Content,
     },
     {
-      href: "/UploadBook",
+      to: "/UploadBook",
       text: "Upload Karya",
       element: UploadBook,
     },
     {
-      href: "/login",
+      to: "/login",
       text: "Login",
       element: Login,
     },
     {
-      href: "/profile",
+      to: "/profile",
       text: "Profile",
       element: Profile,
     },
@@ -41,7 +43,7 @@ export default function NavBar(data) {
   return (
     <>
       <Navbar style={{ backgroundColor: "#FFFFFF" }}>
-        <Navbar.Brand href="App.js">
+        <Navbar.Brand to="App.js">
           <img src="../assets/img/diary.png" alt="logo" width="150px" className="img-fluid m-3" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -57,17 +59,17 @@ export default function NavBar(data) {
       <Navbar style={{ backgroundColor: "#FFFFFF" }} className="text-center justify-content-center">
         <Nav className="me-align-center gh-nav">
           {NavItem().map((item) => {
-            if (data.currPath.toLowerCase() == item.href.toLowerCase()) {
+            if (data.currPath.toLowerCase() === item.to.toLowerCase()) {
               return (
-                <Nav.Link key={item.text} className="gh-navlink active" href={item.href}>
+                <Link key={item.text} className="gh-navlink active" to={item.to}>
                   {item.text}
-                </Nav.Link>
+                </Link>
               );
             } else {
               return (
-                <Nav.Link key={item.text} className="gh-navlink" href={item.href}>
+                <Link key={item.text} className="gh-navlink" to={item.to}>
                   {item.text}
-                </Nav.Link>
+                </Link>
               );
             }
           })}
