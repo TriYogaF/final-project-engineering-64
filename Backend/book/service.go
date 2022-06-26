@@ -24,6 +24,7 @@ type Service interface {
 	UpdateBookCategory(input CreateBookInput, bookID int) ([]string, error)
 	SaveReadHistory(bookID int, UserID int) (History, error)
 	GetLastReader(bookID int, UserID int) ([]user.User, error)
+	SaveReview(input GetReviewBookInput) (Review, error)
 }
 
 type service struct {
@@ -39,6 +40,15 @@ func (s *service) GetBooks() ([]Book, error) {
 	if err != nil {
 		return books, err
 	}
+	// for _, book := range books {
+	// 	score, err := s.repository.GetBookReview(book.ID)
+	// 	if err != nil {
+	// 		return books, err
+	// 	}
+	// 	book.Score = score
+
+	// 	books = append(books, book)
+	// }
 
 	return books, nil
 }
@@ -60,6 +70,12 @@ func (s *service) GetBookByID(input GetBookDetailInput) (Book, error) {
 	if err != nil {
 		return book, err
 	}
+
+	score, err := s.repository.GetBookReview(input.ID)
+	if err != nil {
+		return book, err
+	}
+	book.Score = score
 
 	return book, nil
 }
@@ -249,4 +265,35 @@ func (s *service) GetLastReader(bookID int, UserID int) ([]user.User, error) {
 
 	return dataHistory, nil
 
+}
+
+func (s *service) SaveReview(input GetReviewBookInput) (Review, error) {
+	// find review by id
+	reviewData, err := s.repository.GetReview(input.BookID, input.UserID)
+	log.Println(err)
+	if err != nil {
+		return reviewData, err
+	}
+
+	review := Review{}
+	review.BookID = input.BookID
+	review.UserID = input.UserID
+	review.Score = input.Score
+
+	if reviewData.ID == 0 {
+		saveReview, err := s.repository.SaveReview(review)
+		log.Println(err)
+		if err != nil {
+			return saveReview, err
+		}
+	} else {
+		review.ID = reviewData.ID
+		updateReview, err := s.repository.UpdateReview(review)
+		log.Println(err)
+		if err != nil {
+			return updateReview, err
+		}
+	}
+
+	return review, nil
 }

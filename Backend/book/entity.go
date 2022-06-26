@@ -16,6 +16,7 @@ type Book struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	Category   []string
+	Score      int
 }
 
 type BookCategory struct {
@@ -29,4 +30,13 @@ type History struct {
 	UserID    int
 	BookID    int
 	CreatedAt time.Time
+}
+
+type Review struct {
+	ID        int
+	UserID    int
+	BookID    int
+	Score     int
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

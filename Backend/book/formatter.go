@@ -12,6 +12,7 @@ type BookFormatter struct {
 	CoverImage string    `json:"cover_image"`
 	Slug       string    `json:"slug"`
 	Status     string    `json:"status"`
+	Score      int       `json:"score"`
 	CreatedAt  time.Time `json:"created_at"`
 	// Category 	string `json:"category"`
 }
@@ -24,6 +25,7 @@ func FormatBook(book Book) BookFormatter {
 	BookFormatter.CoverImage = book.CoverImage
 	BookFormatter.Slug = book.Slug
 	BookFormatter.Status = book.Status
+	BookFormatter.Score = book.Score
 	BookFormatter.CreatedAt = book.CreatedAt
 
 	return BookFormatter
@@ -51,6 +53,7 @@ type BookDetailFormatter struct {
 	Status     string    `json:"status"`
 	Slug       string    `json:"slug"`
 	CreatedAt  time.Time `json:"created_at"`
+	Score      int       `json:"score"`
 	Category   []string  `json:"category"`
 }
 
@@ -66,6 +69,7 @@ func FormatBookDetail(book Book) BookDetailFormatter {
 	bookDetailFormatter.Status = book.Status
 	bookDetailFormatter.Slug = book.Slug
 	bookDetailFormatter.CreatedAt = book.CreatedAt
+	bookDetailFormatter.Score = book.Score
 	bookDetailFormatter.Category = book.Category
 
 	return bookDetailFormatter

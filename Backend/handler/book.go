@@ -374,3 +374,32 @@ func (h *bookHandler) GetLastReader(c *gin.Context) {
 	response := helper.APIResponse("Detail of Book", http.StatusOK, "success", book.FormatLastReader(dataHistory))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *bookHandler) SaveReview(c *gin.Context) {
+	var input book.GetReviewBookInput
+
+	err := c.ShouldBindJSON(&input)
+	log.Println(err)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to save review", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	currentUser := c.MustGet("CurrentUser").(user.User)
+	input.UserID = currentUser.ID
+
+	review, err := h.service.SaveReview(input)
+	log.Println(err)
+	if err != nil {
+		response := helper.APIResponse("Failed to save review", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to save review", http.StatusOK, "success", review)
+	c.JSON(http.StatusOK, response)
+}
