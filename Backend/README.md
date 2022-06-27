@@ -589,4 +589,69 @@ Response
 }
 ```
 
+### Get Last Reader 
+Untuk mendapatkan data pembaca buku terakhir
+
+Endpoint `Method : GET`
+```
+'Domain'/api/v1/books/history/'book_id'
+```
+
+Parameter `Body : none`
+```
+none
+```
+Response
+```
+{
+    "meta": {
+        "message": "Detail of Book",
+        "code": 200,
+        "status": "success"
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Rachmat",
+            "gender": "Male",
+            "file_avatar": "images/avatars/1-deSims - BuildWith Angga.png"
+        }
+    ]
+}
+```
+
+### Save Books Review
+Untuk mengirim data review buku 
+
+Endpoint `Method : POST`
+```
+'Domain'/api/v1/books/review
+```
+
+Parameter `Body : JSON` `Score: 1 - 5`
+```
+{
+    "book_id": 1,
+    "score": 5
+}
+```
+Response
+```
+{
+    "meta": {
+        "message": "Success to save review",
+        "code": 200,
+        "status": "success"
+    },
+    "data": {
+        "ID": 1,
+        "UserID": 1,
+        "BookID": 1,
+        "Score": 5,
+        "CreatedAt": "0001-01-01T00:00:00Z",
+        "UpdatedAt": "0001-01-01T00:00:00Z"
+    }
+}
+```
+
 Note : Panduan akan diupdate secara berkala sesuai tahap development

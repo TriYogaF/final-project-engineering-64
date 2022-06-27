@@ -1,14 +1,18 @@
 package book
 
-import "time"
+import (
+	"diary/user"
+	"time"
+)
 
 type BookFormatter struct {
 	ID         int       `json:"id"`
 	Title      string    `json:"title"`
 	Writer     string    `json:"writer"`
-	CoverImage string   `json:"cover_image"`
+	CoverImage string    `json:"cover_image"`
 	Slug       string    `json:"slug"`
 	Status     string    `json:"status"`
+	Score      int       `json:"score"`
 	CreatedAt  time.Time `json:"created_at"`
 	// Category 	string `json:"category"`
 }
@@ -21,6 +25,7 @@ func FormatBook(book Book) BookFormatter {
 	BookFormatter.CoverImage = book.CoverImage
 	BookFormatter.Slug = book.Slug
 	BookFormatter.Status = book.Status
+	BookFormatter.Score = book.Score
 	BookFormatter.CreatedAt = book.CreatedAt
 
 	return BookFormatter
@@ -37,18 +42,19 @@ func FormatBooks(books []Book) []BookFormatter {
 	return booksFormatter
 }
 
-type BookDetailFormatter struct{
-	ID 			int 	`json:"id"`
-	Title		string 	`json:"title"`
-	Writer 		string 	`json:"writer"`
-	Pages 		int 	`json:"pages"`
-	Synopsis 	string 	`json:"synopsis"`
-	CoverImage 	string	`json:"cover_image"`
-	File 		string `json:"file"`
-	Status 		string `json:"status"`
-	Slug 		string `json:"slug"`
-	CreatedAt 	time.Time `json:"created_at"`
-	Category 	string `json:"category"`
+type BookDetailFormatter struct {
+	ID         int       `json:"id"`
+	Title      string    `json:"title"`
+	Writer     string    `json:"writer"`
+	Pages      int       `json:"pages"`
+	Synopsis   string    `json:"synopsis"`
+	CoverImage string    `json:"cover_image"`
+	File       string    `json:"file"`
+	Status     string    `json:"status"`
+	Slug       string    `json:"slug"`
+	CreatedAt  time.Time `json:"created_at"`
+	Score      int       `json:"score"`
+	Category   []string  `json:"category"`
 }
 
 func FormatBookDetail(book Book) BookDetailFormatter {
@@ -63,19 +69,20 @@ func FormatBookDetail(book Book) BookDetailFormatter {
 	bookDetailFormatter.Status = book.Status
 	bookDetailFormatter.Slug = book.Slug
 	bookDetailFormatter.CreatedAt = book.CreatedAt
+	bookDetailFormatter.Score = book.Score
 	bookDetailFormatter.Category = book.Category
 
 	return bookDetailFormatter
 }
 
-type ReadBookFormatter struct{
-	ID 			int 	`json:"id"`
-	Title		string 	`json:"title"`
-	Pages 		int 	`json:"pages"`
-	File 		string `json:"file"`
+type ReadBookFormatter struct {
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	Pages int    `json:"pages"`
+	File  string `json:"file"`
 }
 
-func FormatReadBook(book Book) ReadBookFormatter{
+func FormatReadBook(book Book) ReadBookFormatter {
 	readBookFormatter := ReadBookFormatter{}
 	readBookFormatter.ID = book.ID
 	readBookFormatter.Title = book.Title
@@ -83,4 +90,29 @@ func FormatReadBook(book Book) ReadBookFormatter{
 	readBookFormatter.File = book.File
 
 	return readBookFormatter
+}
+
+type LastReaderFormatter struct {
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	Gender     string `json:"gender"`
+	FileAvatar string `json:"file_avatar"`
+	// Time       time.Time `json:"time"`
+}
+
+func FormatLastReader(users []user.User) []LastReaderFormatter {
+	lastReaders := []LastReaderFormatter{}
+
+	for _, user := range users {
+		lastReader := LastReaderFormatter{}
+		lastReader.ID = user.ID
+		lastReader.Name = user.Name
+		lastReader.Gender = user.Gender
+		lastReader.FileAvatar = user.FileAvatar
+		// lastReader.Time = user.CreatedAt
+
+		lastReaders = append(lastReaders, lastReader)
+	}
+
+	return lastReaders
 }
