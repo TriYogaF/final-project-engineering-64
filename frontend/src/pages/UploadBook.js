@@ -1,7 +1,12 @@
-import React from "react";
+import React, {useRef} from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 
 function UploadBook() {
+  const inputFile = useRef(null);
+
+  const onClick = (e) => {
+    inputFile.current.click();
+  };
   return (
     <Container className="my-5">
       <Row className="justify-content-center">
@@ -38,9 +43,12 @@ function UploadBook() {
               <Form.Control type="text" />
             </Form.Group>
             <Form.Group className="mb-3" controlId="inputFileBuku">
-              <Form.Label>File Buku</Form.Label>
-              <Form.Control type="text" />
+            <Form.Label>File Buku</Form.Label>
+            <input type="file" id="file" ref={inputFile}style={{ display: "none" }}/>
             </Form.Group>
+            <button onClick={onClick}>open file browser</button>
+            <br></br>
+            <br></br>
             <Button variant="primary" type="submit">
               Submit
             </Button>
