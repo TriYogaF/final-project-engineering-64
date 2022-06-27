@@ -1,5 +1,6 @@
 import Header from "../component/Header";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import React from "react";
 import Footer from "../component/Footer";
 import gambar from "../assets/book.png";
@@ -16,7 +17,9 @@ export default function Content() {
               <Card.Img variant="top" src={gambar} />
               <Card.Body>
                 <Card.Title>Card Title</Card.Title>
-                <Button variant="primary">Read</Button>
+                <Link to="/book/1">
+                  <Button variant="primary">Read</Button>
+                </Link>
               </Card.Body>
             </Card>
           </Col>
