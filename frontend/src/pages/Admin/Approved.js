@@ -88,7 +88,7 @@ export default function Approved() {
                         <tr key={book.id}>
                            <td>{book.title}</td>
                            <td>{book.status}</td>
-                           <td>{book.date}</td>
+                           <td>{book.created_at}</td>
                            <td>
                               <button onClick={() => handleUpdate(book)}>Accept</button>
                               <button onClick={() => handleDelete(book)}>Decline</button>

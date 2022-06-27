@@ -26,7 +26,7 @@ export default function Checked() {
          if (book.id === id) {
             return {
                ...book,
-               status: "Approved",
+               status: book.status === "Approved",
             };
          }
          return book;
@@ -63,7 +63,7 @@ export default function Checked() {
                         <tr key={book.id}>
                            <td>{book.title}</td>
                            <td>{book.status}</td>
-                           <td>{book.date}</td>
+                           <td>{book.created_at}</td>
                            <td>
                               <button onClick={() => handleClick(book.id)}>Approval</button>
                            </td>

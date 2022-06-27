@@ -58,7 +58,7 @@ export default function Delete() {
                            <tr key={book.id}>
                               <td>{book.title}</td>
                               <td>{book.status}</td>
-                              <td>{book.date}</td>
+                              <td>{book.created_at}</td>
                               <td>
                                  <button onClick={() => handleClick(book.id)}>Deleted</button>
                               </td>
