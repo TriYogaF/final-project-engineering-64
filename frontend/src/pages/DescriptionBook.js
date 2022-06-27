@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import gambar from "../assets/book.png";
 // import axios from "../api/axios";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -27,10 +27,10 @@ export default function DescriptionBook() {
     };
     getBook();
 
-    // return () => {
-    //   // isMounted = false;
-    //   controller.abort();
-    // };
+    return () => {
+      // isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   return (
