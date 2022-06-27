@@ -33,8 +33,7 @@ export default function Content() {
         <Row>
           <Card.Title>Science</Card.Title>
           <Col md={3}>
-            <Card style={{ width: "10rem" }}>
-              <Card.Img variant="top" src={gambar} />
+            <Card style={{ width: "20rem" }}>
               <Card.Body>
                 <Card.Title>tes</Card.Title>
                 <Link to="/description">
@@ -45,9 +44,9 @@ export default function Content() {
           </Col>
           {books.map((book) => (
             <Col md={3}>
-              <Card style={{ width: "10rem" }}>
-                <Card.Img variant="top" src={gambar} />
+              <Card style={{ width: "20rem" }}>
                 <Card.Body>
+                  <Card.Img variant="top" src={gambar} />
                   <Card.Title>{book.title}</Card.Title>
                   <Link to="/description">
                     <Button variant="primary">Read</Button>
