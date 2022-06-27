@@ -44,8 +44,8 @@ function App() {
               <Route key={item.to} path={item.to} element={<item.element />} />
             ))}
             <Route path="/" element={<Content />} />
-            <Route path="/readingsite" element={<ReadingSite />} />
-            <Route path="/description" element={<DescriptionBook />} />
+            <Route path="/read" element={<ReadingSite />} />
+            <Route path="/book/1" element={<DescriptionBook />} />
             <Route path="/admin" element={<Admin />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="approved" element={<Approved />} />
