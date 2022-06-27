@@ -27,11 +27,6 @@ export const NavItem = () => {
       element: UploadBook,
     },
     {
-      to: "/login",
-      text: "Login",
-      element: Login,
-    },
-    {
       to: "/profile",
       text: "Profile",
       element: Profile,
