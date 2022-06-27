@@ -1,7 +1,39 @@
 import { Container, Row, Col, Form, FormControl, Navbar } from "react-bootstrap";
 import { Table } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import axios from "../../api/axios";
 
-export default function Dashboard() {
+export default function Checked() {
+   const [data, setData] = useState([]);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(false);
+
+   useEffect(() => {
+      const fetchData = async () => {
+         try {
+            const response = await axios.get("/api/v1/books");
+            setData(response.data.data);
+            setLoading(false);
+         } catch (err) {
+            setError(true);
+         }
+      };
+      fetchData();
+   }, []);
+
+   const handleClick = (id) => {
+      const newData = data.map((book) => {
+         if (book.id === id) {
+            return {
+               ...book,
+               status: "Approved",
+            };
+         }
+         return book;
+      });
+      setData(newData);
+   }
+
    return (
       <Container fluid>
          <Row>
@@ -13,7 +45,7 @@ export default function Dashboard() {
                   <Navbar.Toggle aria-controls="basic-navbar-nav" />
                      <Navbar.Collapse id="basic-navbar-nav">
                         <Form className="d-inline mx-2 ms-auto">
-                          <FormControl type="text" placeholder="Search" />
+                           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                         </Form>
                      </Navbar.Collapse>
                </Navbar>
@@ -27,12 +59,16 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                     <tr>
-                        <td>Gambar Buku</td>
-                        <td>Verified</td>
-                        <td>17/07/2022</td>
-                        <td>Accepted</td>
-                     </tr>
+                     {data.map((book) => (
+                        <tr key={book.id}>
+                           <td>{book.title}</td>
+                           <td>{book.status}</td>
+                           <td>{book.date}</td>
+                           <td>
+                              <button onClick={() => handleClick(book.id)}>Approval</button>
+                           </td>
+                         </tr>
+                     ))}
                   </tbody>
                </Table>
             </Col>
