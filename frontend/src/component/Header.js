@@ -19,7 +19,6 @@ export default function Content() {
                  Membaca memperkaya ilmuku dan memperluas imajinasiku.
                </p>
                <h4 className="text-white sm-2 mt-5 mt-lg-0 mb-3">Membaca Dimasa Saja</h4>
-               <a href="/" className="btn btn-success mt-1 py-3 px-5">Get Started</a>
             </div>
             <div className="col-4 text-center text-sm-right ms-auto mb-5 mt-5">
                <img style={size.md} src="/assets/img/book.png" alt="Book" />

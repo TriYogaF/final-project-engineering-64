@@ -1,6 +1,7 @@
 import Content from './pages/Content';
 import UploadBook from "./pages/UploadBook";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 // import Login from "./pages/Login";
 import Admin from "./pages/Admin/Admin";
 //import Header from './pages/Header';
@@ -35,10 +36,11 @@ function App() {
           NavItem().map(
             item => (<Route key={item.href} path={item.href} element={<item.element/>} />))
           }
-        <Route path="/" element={<Content />} />
-          <Route path="/uploadbook" element={<UploadBook />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<Admin />} >
+            <Route path="/" element={<Content />} />
+           <Route path="/uploadbook" element={<UploadBook />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />} >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="approved" element={<Approved />} />
             <Route path="checked" element={<Checked />} />

@@ -46,7 +46,7 @@ export default function Register() {
                   <Form.Label>Confirm Password</Form.Label>
                   <Form.Control type="password" placeholder="Password" />
                 </Form.Group>
-                <Button variant="light" className="text-light gh-bg-secondary" type="submit">
+                <Button href="/login" variant="light" className="text-light gh-bg-secondary" type="submit">
                   Submit
                 </Button>
               </Form>

@@ -28,11 +28,6 @@ export const NavItem = () => {
          element: UploadBook
       }, 
       {
-         href: "/login",
-         text: "Login",
-         element: Login
-      },
-      {
          href: "/profile",
          text: "Profile",
          element: Profile
